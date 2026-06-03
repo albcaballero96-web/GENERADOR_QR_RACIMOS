@@ -106,7 +106,7 @@ def generar_pdf(
         # QR GRANDE
         # -------------------------
 
-        qr_size = 2.4 * cm
+        qr_size = 2.8 * cm
 
         qr_y = (
             page_height
