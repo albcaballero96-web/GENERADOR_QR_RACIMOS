@@ -146,7 +146,7 @@ def generar_pdf(
             9
         )
 
-        y_texto = qr_y - 0.95 * cm
+        y_texto = qr_y - 0.8 * cm
 
         c.drawCentredString(
             page_width / 2,
