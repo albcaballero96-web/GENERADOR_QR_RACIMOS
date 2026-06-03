@@ -103,7 +103,7 @@ def generar_pdf(
         espacio_superior = 2.4 * cm
 
         # -------------------------
-        # QR
+        # QR GRANDE
         # -------------------------
 
         qr_size = 2.4 * cm
@@ -133,7 +133,7 @@ def generar_pdf(
 
         c.drawCentredString(
             page_width / 2,
-            qr_y - 0.10 * cm,
+            qr_y - 0.12 * cm,
             codigo_qr
         )
 
@@ -142,35 +142,36 @@ def generar_pdf(
         # -------------------------
 
         c.setFont(
-                "Helvetica-Bold",
-                9
-            )
-            
-            y_texto = qr_y - 1.0 * cm
-            
-            c.drawCentredString(
-                page_width / 2,
-                y_texto,
-                f"{tipo_conteo} CONTEO"
-            )
-            
-            c.drawCentredString(
-                page_width / 2,
-                y_texto - 0.45 * cm,
-                material
-            )
-            
-            c.drawCentredString(
-                page_width / 2,
-                y_texto - 0.90 * cm,
-                tipo_racimo
-            )
-            
-            c.drawCentredString(
-                page_width / 2,
-                y_texto - 1.35 * cm,
-                f"{numero}"
-            )
+            "Helvetica-Bold",
+            9
+        )
+
+        y_texto = qr_y - 0.95 * cm
+
+        c.drawCentredString(
+            page_width / 2,
+            y_texto,
+            f"{tipo_conteo} CONTEO"
+        )
+
+        c.drawCentredString(
+            page_width / 2,
+            y_texto - 0.45 * cm,
+            material
+        )
+
+        c.drawCentredString(
+            page_width / 2,
+            y_texto - 0.90 * cm,
+            tipo_racimo
+        )
+
+        c.drawCentredString(
+            page_width / 2,
+            y_texto - 1.35 * cm,
+            f"{numero}"
+        )
+
         c.showPage()
 
     c.save()
