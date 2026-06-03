@@ -106,7 +106,7 @@ def generar_pdf(
         # QR GRANDE
         # -------------------------
 
-        qr_size = 2.8 * cm
+        qr_size = 2.9 * cm
 
         qr_y = (
             page_height
@@ -146,7 +146,7 @@ def generar_pdf(
             9
         )
 
-        y_texto = qr_y - 0.8 * cm
+        y_texto = qr_y - 0.7 * cm
 
         c.drawCentredString(
             page_width / 2,
