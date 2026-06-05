@@ -82,11 +82,23 @@ def generar_pdf(
         # GENERAR QR
         # -------------------------
 
-        qr = qrcode.make(codigo_qr)
+        qr = qrcode.QRCode(
+            version=1,
+            box_size=10,
+            border=1
+        )
+
+        qr.add_data(codigo_qr)
+        qr.make(fit=True)
+
+        img = qr.make_image(
+            fill_color="black",
+            back_color="white"
+        )
 
         buffer = io.BytesIO()
 
-        qr.save(
+        img.save(
             buffer,
             format="PNG"
         )
@@ -96,31 +108,47 @@ def generar_pdf(
         img = Image.open(buffer)
 
         # -------------------------
-        # TEXTO SUPERIOR
+        # QR SUPERIOR
+        # -------------------------
+
+        qr_size = 2.0 * cm
+
+        qr_top_y = page_height - qr_size - 0.25 * cm
+
+        c.drawInlineImage(
+            img,
+            (page_width - qr_size) / 2,
+            qr_top_y,
+            qr_size,
+            qr_size
+        )
+
+        # -------------------------
+        # TEXTO CENTRAL
         # -------------------------
 
         c.setFont(
             "Helvetica-Bold",
-            9
+            8
         )
 
-        y_texto = page_height - 0.6 * cm
+        centro_y = page_height / 2 + 0.45 * cm
 
         c.drawCentredString(
             page_width / 2,
-            y_texto,
+            centro_y,
             f"{tipo_conteo} CONTEO"
         )
 
         c.drawCentredString(
             page_width / 2,
-            y_texto - 0.35 * cm,
+            centro_y - 0.35 * cm,
             material
         )
 
         c.drawCentredString(
             page_width / 2,
-            y_texto - 0.70 * cm,
+            centro_y - 0.70 * cm,
             tipo_racimo
         )
 
@@ -128,31 +156,14 @@ def generar_pdf(
         # QR INFERIOR
         # -------------------------
 
-        qr_size = 2.9 * cm
-
-        qr_y = 0.55 * cm
+        qr_bottom_y = 0.25 * cm
 
         c.drawInlineImage(
             img,
             (page_width - qr_size) / 2,
-            qr_y,
+            qr_bottom_y,
             qr_size,
             qr_size
-        )
-
-        # -------------------------
-        # CÓDIGO DEBAJO DEL QR
-        # -------------------------
-
-        c.setFont(
-            "Helvetica",
-            4
-        )
-
-        c.drawCentredString(
-            page_width / 2,
-            0.20 * cm,
-            codigo_qr
         )
 
         c.showPage()
