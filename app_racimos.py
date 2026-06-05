@@ -124,17 +124,11 @@ def generar_pdf(
             tipo_racimo
         )
 
-        c.drawCentredString(
-            page_width / 2,
-            y_texto - 1.05 * cm,
-            f"{numero}"
-        )
-
         # -------------------------
         # QR INFERIOR
         # -------------------------
 
-        qr_size = 2.3 * cm
+        qr_size = 2.5 * cm
 
         qr_y = 0.55 * cm
 
