@@ -40,88 +40,127 @@ def codigo_racimo(tipo_racimo):
     return mapa.get(tipo_racimo, "XXX")
 
 
-# -------------------------
-# GENERAR QR
-# -------------------------
+# ---------------------------------
+# PDF
+# ---------------------------------
 
-qr = qrcode.make(codigo_qr)
+def generar_pdf(
+    campaña,
+    tipo_conteo,
+    material,
+    tipo_racimo,
+    numero_inicial,
+    cantidad
+):
 
-buffer = io.BytesIO()
+    temp_pdf = tempfile.NamedTemporaryFile(
+        delete=False,
+        suffix=".pdf"
+    )
 
-qr.save(
-    buffer,
-    format="PNG"
-)
+    c = canvas.Canvas(
+        temp_pdf.name,
+        pagesize=(page_width, page_height)
+    )
 
-buffer.seek(0)
+    for numero in range(
+        numero_inicial,
+        numero_inicial + cantidad
+    ):
 
-img = Image.open(buffer)
+        codigo_racimo_num = f"R{numero:05d}"
 
-# -------------------------
-# TEXTO SUPERIOR
-# -------------------------
+        codigo_qr = (
+            f"{campaña}-"
+            f"{tipo_conteo}-"
+            f"{codigo_material(material)}-"
+            f"{codigo_racimo(tipo_racimo)}-"
+            f"{codigo_racimo_num}"
+        )
 
-c.setFont(
-    "Helvetica-Bold",
-    9
-)
+        # -------------------------
+        # GENERAR QR
+        # -------------------------
 
-y_texto = page_height - 0.7 * cm
+        qr = qrcode.make(codigo_qr)
 
-c.drawCentredString(
-    page_width / 2,
-    y_texto,
-    f"{tipo_conteo} CONTEO"
-)
+        buffer = io.BytesIO()
 
-c.drawCentredString(
-    page_width / 2,
-    y_texto - 0.45 * cm,
-    material
-)
+        qr.save(
+            buffer,
+            format="PNG"
+        )
 
-c.drawCentredString(
-    page_width / 2,
-    y_texto - 0.90 * cm,
-    tipo_racimo
-)
+        buffer.seek(0)
 
-c.drawCentredString(
-    page_width / 2,
-    y_texto - 1.35 * cm,
-    f"{numero}"
-)
+        img = Image.open(buffer)
 
-# -------------------------
-# QR INFERIOR
-# -------------------------
+        # -------------------------
+        # TEXTO SUPERIOR
+        # -------------------------
 
-qr_size = 2.2 * cm
+        c.setFont(
+            "Helvetica-Bold",
+            9
+        )
 
-qr_y = 0.6 * cm
+        y_texto = page_height - 0.6 * cm
 
-c.drawInlineImage(
-    img,
-    (page_width - qr_size) / 2,
-    qr_y,
-    qr_size,
-    qr_size
-)
+        c.drawCentredString(
+            page_width / 2,
+            y_texto,
+            f"{tipo_conteo} CONTEO"
+        )
 
-# -------------------------
-# CÓDIGO DEBAJO DEL QR
-# -------------------------
+        c.drawCentredString(
+            page_width / 2,
+            y_texto - 0.35 * cm,
+            material
+        )
 
-c.setFont(
-    "Helvetica",
-    4
-)
+        c.drawCentredString(
+            page_width / 2,
+            y_texto - 0.70 * cm,
+            tipo_racimo
+        )
 
-c.drawCentredString(
-    page_width / 2,
-    0.25 * cm,
-    codigo_qr
-)
+        c.drawCentredString(
+            page_width / 2,
+            y_texto - 1.05 * cm,
+            f"{numero}"
+        )
+
+        # -------------------------
+        # QR INFERIOR
+        # -------------------------
+
+        qr_size = 2.3 * cm
+
+        qr_y = 0.55 * cm
+
+        c.drawInlineImage(
+            img,
+            (page_width - qr_size) / 2,
+            qr_y,
+            qr_size,
+            qr_size
+        )
+
+        # -------------------------
+        # CÓDIGO DEBAJO DEL QR
+        # -------------------------
+
+        c.setFont(
+            "Helvetica",
+            4
+        )
+
+        c.drawCentredString(
+            page_width / 2,
+            0.20 * cm,
+            codigo_qr
+        )
+
         c.showPage()
 
     c.save()
