@@ -128,7 +128,7 @@ def generar_pdf(
         # QR INFERIOR
         # -------------------------
 
-        qr_size = 2.5 * cm
+        qr_size = 2.9 * cm
 
         qr_y = 0.55 * cm
 
